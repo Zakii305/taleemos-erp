@@ -1,0 +1,6 @@
+{
+  "name": "TaleemOS Hub - Educational ERP Platform",
+  "description": "Multi-tenant Educational ERP Platform for Schools, Colleges & Academies with academic scheduling, attendance, fee collection, student records, and multi-role portals.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

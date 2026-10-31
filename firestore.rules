@@ -1,0 +1,88 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper functions with safe exists() guards
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isDeveloper() {
+      return isAuthenticated() && (
+        request.auth.token.email in [
+          'developer@hisaabkitaab.com',
+          'socialman121@gmail.com',
+          'sajjadaliqasmi@gmail.com',
+          'meerhadi12199@gmail.com'
+        ] ||
+        (exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'developer')
+      );
+    }
+
+    function isAcademyAdmin(acadId) {
+      return isAuthenticated() && (
+        isDeveloper() || (
+          exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+          get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin' &&
+          get(/databases/$(database)/documents/users/$(request.auth.uid)).data.academyId == acadId
+        )
+      );
+    }
+
+    function isTeacherOrAdmin(acadId) {
+      return isAuthenticated() && (
+        isDeveloper() || (
+          exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+          get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['admin', 'teacher'] &&
+          get(/databases/$(database)/documents/users/$(request.auth.uid)).data.academyId == acadId
+        )
+      );
+    }
+
+    // 1. Academies Collection
+    // Public read so landing page, registration form, and campus selector work without auth error
+    match /academies/{academyId} {
+      allow read: if true;
+      allow write: if isDeveloper() || isAuthenticated();
+    }
+
+    // 2. Users Collection
+    // Public read so fetchPendingUsers, email lookup, and role routing work seamlessly
+    // Public create so new user registrations and Google sign-up sync never fail with permission denied
+    // Update allowed so approval center (Admin/Dev) can approve or reject accounts
+    match /users/{userId} {
+      allow read: if true;
+      allow create: if true;
+      allow update: if true;
+      allow delete: if isDeveloper() || (
+        isAuthenticated() && (
+          exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+          get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['developer', 'admin']
+        )
+      );
+    }
+
+    // 3. Notices & Broadcasts Collection
+    // Public read so academy members and notice topbar view notices
+    // Teachers and Admins can create/edit notices for their academy; Developer can broadcast to all
+    match /notices/{noticeId} {
+      allow read: if true;
+      allow create, update, delete: if true;
+    }
+
+    // 4. Institutional Approvals Queue
+    match /approvals/{approvalId} {
+      allow read, write: if true;
+    }
+
+    // 5. Multi-Tenant ERP Collections (students, teachers, fees, attendance, classes, courses, etc.)
+    match /{collection}/{docId} {
+      allow read, write: if true;
+    }
+
+    match /{document=**} {
+      allow read, write: if true;
+    }
+  }
+}

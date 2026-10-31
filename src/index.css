@@ -1,0 +1,144 @@
+@import "tailwindcss";
+
+@layer base {
+  * {
+    border-color: rgba(226, 232, 240, 0.8);
+  }
+
+  html, body {
+    max-width: 100vw;
+    overflow-x: hidden;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+}
+
+/* Day / Night Dark Theme Overrides */
+html.dark body {
+  background-color: #090d16 !important;
+  color: #f1f5f9 !important;
+}
+
+html.dark .bg-white {
+  background-color: #0f172a !important;
+  border-color: #1e293b !important;
+  color: #f8fafc !important;
+}
+
+html.dark .bg-slate-50 {
+  background-color: #1e293b !important;
+  border-color: #334155 !important;
+  color: #f8fafc !important;
+}
+
+html.dark .text-slate-900 {
+  color: #f8fafc !important;
+}
+
+html.dark .text-slate-800 {
+  color: #e2e8f0 !important;
+}
+
+html.dark .text-slate-700 {
+  color: #cbd5e1 !important;
+}
+
+html.dark .text-slate-600 {
+  color: #94a3b8 !important;
+}
+
+html.dark .border-slate-200,
+html.dark .border-slate-100 {
+  border-color: #1e293b !important;
+}
+
+html.dark input,
+html.dark select,
+html.dark textarea {
+  background-color: #1e293b !important;
+  color: #f8fafc !important;
+  border-color: #334155 !important;
+}
+
+/* Custom sleek scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+html.dark ::-webkit-scrollbar-thumb {
+  background: #334155;
+}
+
+/* Smooth mobile touch scrolling for tables and cards */
+.overflow-x-auto,
+.overflow-y-auto,
+table,
+.touch-scroll {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Responsive Table Wrapper helper */
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: visible;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Print utility */
+.print-only {
+  display: none !important;
+}
+
+/* =========================================
+   UNIFIED PRINT LAYOUT (ID CARDS & CERTIFICATES)
+   ========================================= */
+
+/* =========================================
+   DEFINITIVE PRINT ISOLATION CSS
+   ========================================= */
+@media print {
+  @page { margin: 15mm; size: A4 portrait; }
+
+  /* 1. Hide the entire main application */
+  #root {
+    display: none !important;
+  }
+
+  /* 2. Show ONLY the portal mount */
+  #print-mount {
+    display: block !important;
+    position: static !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: white !important;
+  }
+
+  /* 3. Force page breaks for multi-page transcripts */
+  .print-page {
+    page-break-after: always !important;
+    break-after: page !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+  .print-page:last-child {
+    page-break-after: auto !important;
+    break-after: auto !important;
+  }
+
+  /* 4. Ensure tables fit the page and don't split */
+  table { width: 100% !important; page-break-inside: auto !important; }
+  tr { page-break-inside: avoid !important; break-inside: avoid !important; }
+  thead { display: table-header-group; }
+}
