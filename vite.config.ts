@@ -1,6 +1,6 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import path from 'path'
+import { fileURLToPath, URL } from 'node:url'
 import { VitePWA } from 'vite-plugin-pwa'
 
 export default defineConfig({
@@ -8,6 +8,10 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
+      workbox: {
+        // Yeh line file size ki limit barha degi (5 MB)
+        maximumFileSizeToCacheInBytes: 5 * 1024 * 1024
+      },
       manifest: {
         name: 'TaleemOS Pro',
         short_name: 'TaleemOS',
@@ -23,7 +27,7 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src'),
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
   },
 })
