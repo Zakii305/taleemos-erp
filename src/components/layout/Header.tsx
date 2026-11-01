@@ -41,6 +41,8 @@ export const Header: React.FC<HeaderProps> = ({
 
   const isDev = currentUser?.role === 'developer';
   const isAdmin = currentUser?.role === 'admin';
+  const isTeacher = currentUser?.role === 'teacher';
+  const isParent = currentUser?.role === 'parent';
 
   const pendingApprovalsCount = state.approvals.filter((a) => a.status === 'Pending Approval').length;
   const userAcadId = currentUser?.academyId || state.activeInstitutionId;
@@ -106,7 +108,7 @@ export const Header: React.FC<HeaderProps> = ({
           <button type="button" onClick={onOpenSearch} title="Search Hub (Ctrl+K)" className="flex items-center justify-center p-1.5 sm:px-2.5 sm:py-1.5 bg-white/10 hover:bg-white/15 backdrop-blur-md border border-white/10 rounded-xl text-xs text-slate-300 hover:text-white transition-all cursor-pointer">
             <Search className="w-3.5 h-3.5 text-indigo-300" /><span className="hidden md:inline">Search</span>
           </button>
-          <button type="button" onClick={() => onNavigate('users')} title="Open Users Directory" className="flex items-center justify-center p-1.5 sm:px-2.5 sm:py-1.5 bg-white/10 hover:bg-white/15 backdrop-blur-md border border-white/10 rounded-xl text-xs text-slate-200 hover:text-white transition-all cursor-pointer">
+          <button type="button" style={{display: (isParent || isTeacher) ? 'none' : 'flex'}} onClick={() => onNavigate('users')} title="Open Users Directory" className="flex items-center justify-center p-1.5 sm:px-2.5 sm:py-1.5 bg-white/10 hover:bg-white/15 backdrop-blur-md border border-white/10 rounded-xl text-xs text-slate-200 hover:text-white transition-all cursor-pointer">
             <Users className="w-3.5 h-3.5 text-indigo-300" /><span className="hidden md:inline">Users</span>
           </button>
           {isDev && (<button onClick={() => onNavigate('developer')} title="Open Developer Hub" className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white rounded-xl text-xs font-bold border border-purple-400/40 shadow-sm transition cursor-pointer"><span>👑 Dev Hub</span></button>)}

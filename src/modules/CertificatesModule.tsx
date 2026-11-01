@@ -52,7 +52,7 @@ const INITIAL_CERTS: Certificate[] = [
 ];
 
 export default function CertificatesModule() {
-  const currentUser = getCurrentUser();
+  
   const [certs, setCerts] = useState<Certificate[]>(INITIAL_CERTS);
   const [showNew, setShowNew] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);

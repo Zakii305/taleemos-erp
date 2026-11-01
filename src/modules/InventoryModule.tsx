@@ -1,3 +1,4 @@
+import { getCurrentUser } from '../components/auth/AuthSystem';
 import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Package, Plus, Printer, Download, Search, AlertTriangle, ArrowUpRight, ArrowDownLeft, Trash2, Edit2, CheckSquare, Square, X, CheckCircle2 } from 'lucide-react';
@@ -8,6 +9,11 @@ import { LetterheadPrint } from '../components/common/LetterheadPrint';
 
 export const InventoryModule: React.FC = () => {
   const state = erpStorage.getState();
+  const currentUser = getCurrentUser();
+  const isParent = currentUser?.role === 'parent';
+  const isTeacher = currentUser?.role === 'teacher';
+  const isStudent = currentUser?.role === 'student';
+
   const [search, setSearch] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('All');
   const [selectedIds, setSelectedIds] = useState<string[]>([]);

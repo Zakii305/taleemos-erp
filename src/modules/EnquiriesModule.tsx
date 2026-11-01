@@ -1,3 +1,4 @@
+import { getCurrentUser } from '../components/auth/AuthSystem';
 import React, { useState } from 'react';
 import {
   FileText,
@@ -21,6 +22,11 @@ import { triggerBrowserPrint, downloadElementAsPdf } from '../lib/pdf';
 
 export const EnquiriesModule: React.FC = () => {
   const state = erpStorage.getState();
+  const currentUser = getCurrentUser();
+  const isParent = currentUser?.role === 'parent';
+  const isTeacher = currentUser?.role === 'teacher';
+  const isStudent = currentUser?.role === 'student';
+
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('All');
   const [sourceFilter, setSourceFilter] = useState('All');

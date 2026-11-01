@@ -1,3 +1,4 @@
+import { getCurrentUser } from '../components/auth/AuthSystem';
 import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { AlertTriangle, Printer, Download, Search, MessageSquare, Send, CheckCircle2, Phone, CheckSquare, Square, X } from 'lucide-react';
@@ -6,6 +7,11 @@ import { LetterheadPrint } from '../components/common/LetterheadPrint';
 
 export const DefaultersModule: React.FC = () => {
   const state = erpStorage.getState();
+  const currentUser = getCurrentUser();
+  const isParent = currentUser?.role === 'parent';
+  const isTeacher = currentUser?.role === 'teacher';
+  const isStudent = currentUser?.role === 'student';
+
   const [search, setSearch] = useState('');
   const [batchFilter, setBatchFilter] = useState('All');
   

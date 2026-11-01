@@ -1,3 +1,4 @@
+import { getCurrentUser } from '../components/auth/AuthSystem';
 import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { 
@@ -71,7 +72,12 @@ export const ReportCardsModule: React.FC = () => {
     }, 300); // Wait for portal to render
   };
 
-  const filteredRecords = records.filter(r => 
+  const filteredRecords = records.filter(r => {
+    const isChildReport = r.studentName === currentUser?.name || r.rollNo === currentUser?.rollNo;
+    const matchesSearch = r.studentName.toLowerCase().includes(search.toLowerCase()) || r.rollNo.toLowerCase().includes(search.toLowerCase());
+    return matchesSearch && (!(isParent || isStudent) || (r.studentName && isChildReport));
+  });
+  const unusedFiltered = records.filter(r => 
     r.studentName.toLowerCase().includes(search.toLowerCase()) || r.rollNo.toLowerCase().includes(search.toLowerCase())
   );
 
@@ -188,7 +194,7 @@ export const ReportCardsModule: React.FC = () => {
           </div>
           <div className="flex flex-wrap items-center gap-2">
             <button onClick={() => openPrintLedger('all')} className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-white/10 hover:bg-white/20 text-white text-xs font-bold rounded-xl border border-white/20 transition-all cursor-pointer"><Printer className="w-4 h-4" /> Print Ledger</button>
-            <button onClick={() => setIsCreateModalOpen(true)} className="inline-flex items-center gap-1.5 px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-black rounded-xl shadow-lg transition-all cursor-pointer"><Plus className="w-4 h-4" /> Create Transcript</button>
+            <button style={{display: (!isParent && !isTeacher && !isStudent) ? 'flex' : 'none'}} onClick={() => setIsCreateModalOpen(true)} className="inline-flex items-center gap-1.5 px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-black rounded-xl shadow-lg transition-all cursor-pointer"><Plus className="w-4 h-4" /> Create Transcript</button>
           </div>
         </div>
 
@@ -240,7 +246,7 @@ export const ReportCardsModule: React.FC = () => {
                 </div>
                 <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
                   <span className="text-[10px] font-bold text-slate-400 uppercase">{record.examName}</span>
-                  <div className="flex items-center gap-1.5">
+                  <div style={{display: (!isParent && !isTeacher && !isStudent) ? 'flex' : 'none'}} className="flex items-center gap-1.5">
                     <button onClick={(e) => { e.stopPropagation(); setSelectedRecord(record); }} className="p-1.5 text-slate-400 hover:text-indigo-600 bg-slate-50 rounded-lg" title="View Transcript"><FileText className="w-4 h-4" /></button>
                     <button onClick={(e) => handleDelete(record.id, e)} className="p-1.5 text-slate-400 hover:text-rose-600 bg-slate-50 rounded-lg" title="Delete"><Trash2 className="w-4 h-4" /></button>
                   </div>

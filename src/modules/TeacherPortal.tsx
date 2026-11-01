@@ -1,3 +1,4 @@
+import { getCurrentUser } from '../components/auth/AuthSystem';
 import React, { useState } from 'react';
 import {
   GraduationCap,
@@ -29,6 +30,11 @@ interface TeacherPortalProps {
 }
 
 export const TeacherPortal: React.FC<TeacherPortalProps> = ({ user, onNavigate }) => {
+  const currentUser = getCurrentUser();
+  const isParent = currentUser?.role === 'parent';
+  const isTeacher = currentUser?.role === 'teacher';
+  const isStudent = currentUser?.role === 'student';
+
   const state = erpStorage.getState();
 
   // Find teacher profile matching this user

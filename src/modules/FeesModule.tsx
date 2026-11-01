@@ -1,3 +1,4 @@
+import { getCurrentUser } from '../components/auth/AuthSystem';
 import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { DollarSign, Plus, Printer, Download, Search, Receipt, CheckCircle, AlertTriangle, User, QrCode, Trash2, Edit2, CheckSquare, Square, X, CheckCircle2, BarChart3, Filter } from 'lucide-react';
@@ -10,6 +11,20 @@ import { FeeCollectionAnalysisD3 } from '../components/finance/FeeCollectionAnal
 
 export const FeesModule: React.FC = () => {
   const state = erpStorage.getState();
+  const currentUser = getCurrentUser();
+  const isParent = currentUser?.role === 'parent';
+  const isTeacher = currentUser?.role === 'teacher';
+  const isStudent = currentUser?.role === 'student';
+
+  
+  
+  
+  
+
+  
+  
+  
+  
   const [activeTab, setActiveTab] = useState<'vouchers' | 'analysis'>('vouchers');
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('All');
@@ -46,6 +61,8 @@ export const FeesModule: React.FC = () => {
   const totalUnpaidDues = state.fees.filter((f) => f.status === 'Unpaid' || f.status === 'Partial').reduce((sum, f) => sum + f.netPayable, 0);
 
   const filtered = state.fees.filter((f) => {
+    const isChildFee = f.studentName === currentUser?.name || f.rollNo === currentUser?.rollNo;
+    if ((isParent || isStudent) && f.studentName && !isChildFee) return false;
     const matchSearch = f.studentName.toLowerCase().includes(search.toLowerCase()) || f.rollNo.toLowerCase().includes(search.toLowerCase()) || f.voucherNo.toLowerCase().includes(search.toLowerCase());
     const matchStatus = statusFilter === 'All' || f.status === statusFilter;
     const matchMonth = monthFilter === 'All' || f.month === monthFilter;
@@ -153,7 +170,7 @@ export const FeesModule: React.FC = () => {
           </div>
           <div className="flex flex-wrap items-center gap-2">
             <button type="button" onClick={() => triggerPrint('ledger', filtered)} className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-white/10 hover:bg-white/20 text-white text-xs font-bold rounded-xl border border-white/20 transition-all cursor-pointer"><Printer className="w-4 h-4" /> Print Ledger</button>
-            <button type="button" onClick={() => { setIsEditMode(false); setEditingVoucherId(null); setIsAddModalOpen(true); }} className="inline-flex items-center gap-1.5 px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-black rounded-xl shadow-lg transition-all cursor-pointer"><Plus className="w-4 h-4" /> Issue Voucher</button>
+            <button type="button" style={{display: (!isParent && !isTeacher && !isStudent) ? 'flex' : 'none'}} onClick={() => { setIsEditMode(false); setEditingVoucherId(null); setIsAddModalOpen(true); }} className="inline-flex items-center gap-1.5 px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-black rounded-xl shadow-lg transition-all cursor-pointer"><Plus className="w-4 h-4" /> Issue Voucher</button>
           </div>
         </div>
 

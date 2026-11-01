@@ -1,3 +1,4 @@
+import { getCurrentUser } from '../components/auth/AuthSystem';
 import React, { useState, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import {
@@ -14,7 +15,21 @@ interface AttendanceModuleProps {
 }
 
 export const AttendanceModule: React.FC<AttendanceModuleProps> = ({ onNavigate }) => {
+  const currentUser = getCurrentUser();
+  const isParent = currentUser?.role === 'parent';
+  const isTeacher = currentUser?.role === 'teacher';
+  const isStudent = currentUser?.role === 'student';
+
+  
+  
+  
+  
+
   const state = erpStorage.getState();
+  
+  
+  
+  
   const [viewMode, setViewMode] = useState<'daily' | 'heatmap' | 'period'>('daily');
   const [selectedBatch, setSelectedBatch] = useState(state.batches[0]?.batchName || 'Batch 2026-A (Morning)');
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
@@ -217,8 +232,8 @@ export const AttendanceModule: React.FC<AttendanceModuleProps> = ({ onNavigate }
                 <div className="flex items-center gap-2"><span className="text-xs font-bold text-slate-500 uppercase">Date:</span><input type="date" value={selectedDate} onChange={(e) => setSelectedDate(e.target.value)} className="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium outline-none" /></div>
               </div>
               <div className="flex items-center gap-2">
-                <button type="button" onClick={() => markAll('P')} className="px-3 py-1.5 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-200 rounded-xl text-xs font-bold cursor-pointer">Mark All Present</button>
-                <button type="button" onClick={() => markAll('A')} className="px-3 py-1.5 bg-rose-50 text-rose-700 hover:bg-rose-100 border border-rose-200 rounded-xl text-xs font-bold cursor-pointer">Mark All Absent</button>
+                <button type="button" style={{display: (!isParent && !isStudent) ? 'block' : 'none'}} onClick={() => markAll('P')} className="px-3 py-1.5 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-200 rounded-xl text-xs font-bold cursor-pointer">Mark All Present</button>
+                <button type="button" style={{display: (!isParent && !isStudent) ? 'block' : 'none'}} onClick={() => markAll('A')} className="px-3 py-1.5 bg-rose-50 text-rose-700 hover:bg-rose-100 border border-rose-200 rounded-xl text-xs font-bold cursor-pointer">Mark All Absent</button>
               </div>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -244,7 +259,7 @@ export const AttendanceModule: React.FC<AttendanceModuleProps> = ({ onNavigate }
                         <tr key={s.id} className={`hover:bg-slate-50/50 transition ${isSelected ? 'bg-indigo-50/30' : ''}`}>
                           <td className="p-3.5 text-center"><input type="checkbox" checked={isSelected} onChange={(e) => toggleSelect(s.id, e as any)} className="w-4 h-4 rounded text-indigo-600 cursor-pointer" /></td>
                           <td className="p-3.5 font-mono font-bold text-indigo-700">{s.rollNo}</td><td className="p-3.5 font-bold text-slate-900">{s.name}</td><td className="p-3.5 text-slate-600">{s.fatherName}</td><td className="p-3.5 font-mono text-slate-500">{s.phone}</td>
-                          <td className="p-3.5 text-center"><div className="inline-flex items-center gap-1.5 p-1 bg-slate-100 rounded-xl border border-slate-200"><button type="button" onClick={() => handleSetStatus(s, 'P')} className={`px-2.5 py-1 rounded-lg text-xs font-bold transition cursor-pointer ${currentStatus === 'P' ? 'bg-emerald-600 text-white shadow-sm' : 'text-slate-600 hover:bg-slate-200'}`}>P</button><button type="button" onClick={() => handleSetStatus(s, 'A')} className={`px-2.5 py-1 rounded-lg text-xs font-bold transition cursor-pointer ${currentStatus === 'A' ? 'bg-rose-600 text-white shadow-sm' : 'text-slate-600 hover:bg-slate-200'}`}>A</button><button type="button" onClick={() => handleSetStatus(s, 'L')} className={`px-2.5 py-1 rounded-lg text-xs font-bold transition cursor-pointer ${currentStatus === 'L' ? 'bg-amber-500 text-white shadow-sm' : 'text-slate-600 hover:bg-slate-200'}`}>L</button></div></td>
+                          <td className="p-3.5 text-center"><div style={{display: (!isParent && !isStudent) ? 'inline-flex' : 'none'}} className="inline-flex items-center gap-1.5 p-1 bg-slate-100 rounded-xl border border-slate-200"><button type="button" onClick={() => handleSetStatus(s, 'P')} className={`px-2.5 py-1 rounded-lg text-xs font-bold transition cursor-pointer ${currentStatus === 'P' ? 'bg-emerald-600 text-white shadow-sm' : 'text-slate-600 hover:bg-slate-200'}`}>P</button><button type="button" onClick={() => handleSetStatus(s, 'A')} className={`px-2.5 py-1 rounded-lg text-xs font-bold transition cursor-pointer ${currentStatus === 'A' ? 'bg-rose-600 text-white shadow-sm' : 'text-slate-600 hover:bg-slate-200'}`}>A</button><button type="button" onClick={() => handleSetStatus(s, 'L')} className={`px-2.5 py-1 rounded-lg text-xs font-bold transition cursor-pointer ${currentStatus === 'L' ? 'bg-amber-500 text-white shadow-sm' : 'text-slate-600 hover:bg-slate-200'}`}>L</button></div></td>
                         </tr>
                       );
                     })}

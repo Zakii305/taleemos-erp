@@ -12,6 +12,11 @@ import { Modal } from '../components/common/Modal';
 export const IdCardsModule: React.FC = () => {
   const state = erpStorage.getState();
   const currentUser = getCurrentUser();
+  const isParent = currentUser?.role === 'parent';
+  const isTeacher = currentUser?.role === 'teacher';
+  const isStudent = currentUser?.role === 'student';
+
+  
   const isDev = currentUser?.role === 'developer';
 
   const [batchFilter, setBatchFilter] = useState('All');

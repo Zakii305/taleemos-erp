@@ -39,8 +39,13 @@ interface StudentsModuleProps {
 }
 
 export const StudentsModule: React.FC<StudentsModuleProps> = ({ onNavigate }) => {
-  const state = erpStorage.getState();
   const currentUser = getCurrentUser();
+  const isParent = currentUser?.role === 'parent';
+  const isTeacher = currentUser?.role === 'teacher';
+  const isStudent = currentUser?.role === 'student';
+
+  const state = erpStorage.getState();
+  
   const academyId = currentUser?.academyId || state.activeInstitutionId || 'inst-1';
 
   const [search, setSearch] = useState('');

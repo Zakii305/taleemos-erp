@@ -17,8 +17,13 @@ export const AuditLogsModule: React.FC = () => {
   const [isPrintModalOpen, setIsPrintModalOpen] = useState(false);
   const [printData, setPrintData] = useState<AuditLog[] | null>(null);
 
-  const currentUser = getCurrentUser();
+  
   const state = erpStorage.getState();
+  const currentUser = getCurrentUser();
+  const isParent = currentUser?.role === 'parent';
+  const isTeacher = currentUser?.role === 'teacher';
+  const isStudent = currentUser?.role === 'student';
+
   const isDev = currentUser?.role === 'developer';
   const activeAcadId = state.activeInstitutionId;
 

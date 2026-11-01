@@ -17,6 +17,8 @@ export const TopbarNoticesModal: React.FC<TopbarNoticesModalProps> = ({ isOpen, 
   const isDev = currentUser?.role === 'developer';
   const isAdmin = currentUser?.role === 'admin';
   const isTeacher = currentUser?.role === 'teacher';
+  const isParent = currentUser?.role === 'parent';
+  const isStudent = currentUser?.role === 'student';
   const canPostNotices = isDev || isAdmin || isTeacher;
 
   const userAcademyId = currentUser?.academyId || 'inst-1';
@@ -162,7 +164,7 @@ export const TopbarNoticesModal: React.FC<TopbarNoticesModalProps> = ({ isOpen, 
           <button onClick={() => setActiveTab('notices')} className={`px-4 py-2.5 text-xs font-bold transition flex items-center gap-2 border-b-2 ${activeTab === 'notices' ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-slate-500 hover:text-slate-800'}`}>
             <Megaphone className="w-4 h-4" /> Notices ({alerts.length})
           </button>
-          <button onClick={() => setActiveTab('approvals')} className={`px-4 py-2.5 text-xs font-bold transition flex items-center gap-2 border-b-2 ${activeTab === 'approvals' ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-slate-500 hover:text-slate-800'}`}>
+          <button style={{display: (isParent || isTeacher || isStudent) ? 'none' : 'flex'}} onClick={() => setActiveTab('approvals')} className={`px-4 py-2.5 text-xs font-bold transition flex items-center gap-2 border-b-2 ${activeTab === 'approvals' ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-slate-500 hover:text-slate-800'}`}>
             <CheckSquare className="w-4 h-4" /> Approvals ({approvals.length})
           </button>
         </div>

@@ -41,6 +41,11 @@ interface AlertsModuleProps {
 
 export const AlertsModule: React.FC<AlertsModuleProps> = ({ onNavigate }) => {
   const currentUser = getCurrentUser();
+  const isParent = currentUser?.role === 'parent';
+  const isTeacher = currentUser?.role === 'teacher';
+  const isStudent = currentUser?.role === 'student';
+
+  
   const isDev = currentUser?.role === 'developer';
   const userAcademyId = currentUser?.academyId || 'inst-1';
   const userAcademyName =
@@ -159,7 +164,7 @@ export const AlertsModule: React.FC<AlertsModuleProps> = ({ onNavigate }) => {
     // 3. Notice author can modify their own post
     if (
       item.postedById &&
-      (item.postedById === currentUser?.uid || item.postedById === currentUser?.id)
+      (item.postedById === currentUser?.uid || "" || item.postedById === currentUser?.id)
     ) {
       return true;
     }
@@ -261,7 +266,7 @@ export const AlertsModule: React.FC<AlertsModuleProps> = ({ onNavigate }) => {
       academyName: targetAcadName,
       postedBy: currentUser?.name || (isDev ? 'Developer Head' : currentUser?.role === 'teacher' ? 'Faculty Member' : 'Academy Administrator'),
       postedByRole: currentUser?.role || (isDev ? 'developer' : 'teacher'),
-      postedById: currentUser?.uid || currentUser?.id || (isDev ? 'dev-master' : 'user-staff-1'),
+      postedById: currentUser?.uid || "" || currentUser?.id || (isDev ? 'dev-master' : 'user-staff-1'),
     };
 
     erpStorage.addItem('alerts', newAlert);

@@ -1,3 +1,4 @@
+import { getCurrentUser } from '../components/auth/AuthSystem';
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { ShieldCheck, Building2, Users, CheckCircle2, XCircle, Plus, Search, ArrowRight, TrendingUp, MapPin, Phone, Mail, UserCheck, Clock, ExternalLink, RefreshCw, Trash2, Edit3, KeyRound, Sparkles, Copy, Shuffle, Ban, Lock, Eye, EyeOff, Check, Printer, CheckSquare, Square, X } from 'lucide-react';
@@ -14,6 +15,11 @@ interface DeveloperModuleProps {
 }
 
 export const DeveloperModule: React.FC<DeveloperModuleProps> = ({ onNavigate, onSelectAcademy }) => {
+  const currentUser = getCurrentUser();
+  const isParent = currentUser?.role === 'parent';
+  const isTeacher = currentUser?.role === 'teacher';
+  const isStudent = currentUser?.role === 'student';
+
   const [academies, setAcademies] = useState<Academy[]>([]);
   const [pendingAdmins, setPendingAdmins] = useState<AppUser[]>([]);
   const [allUsers, setAllUsers] = useState<AppUser[]>([]);
@@ -186,7 +192,7 @@ export const DeveloperModule: React.FC<DeveloperModuleProps> = ({ onNavigate, on
             </div>
             <div className="flex flex-wrap items-center gap-2.5">
               <button onClick={() => setIsPrintModalOpen(true)} className="px-4 py-2.5 bg-white/10 hover:bg-white/20 text-white rounded-xl text-xs font-bold flex items-center gap-2 border border-white/10 transition shadow-sm cursor-pointer"><Printer className="w-4 h-4 text-indigo-300" /><span>Print Directory</span></button>
-              <button onClick={() => setIsCreateModalOpen(true)} className="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-black flex items-center gap-2 shadow-lg transition active:scale-95 cursor-pointer"><Plus className="w-4 h-4" /><span>Create Academy</span></button>
+              <button style={{display: (!isParent && !isTeacher && !isStudent) ? 'flex' : 'none'}} onClick={() => setIsCreateModalOpen(true)} className="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-black flex items-center gap-2 shadow-lg transition active:scale-95 cursor-pointer"><Plus className="w-4 h-4" /><span>Create Academy</span></button>
               <button onClick={loadData} className="w-10 h-10 bg-white/10 hover:bg-white/20 text-white rounded-xl flex items-center justify-center transition border border-white/10 cursor-pointer"><RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} /></button>
             </div>
           </div>

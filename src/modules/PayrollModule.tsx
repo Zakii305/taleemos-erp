@@ -1,3 +1,4 @@
+import { getCurrentUser } from '../components/auth/AuthSystem';
 import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { DollarSign, Plus, Printer, Download, Search, UserCheck, ShieldCheck, Trash2, Edit2, CheckSquare, Square, X } from 'lucide-react';
@@ -8,6 +9,11 @@ import { LetterheadPrint } from '../components/common/LetterheadPrint';
 
 export const PayrollModule: React.FC = () => {
   const state = erpStorage.getState();
+  const currentUser = getCurrentUser();
+  const isParent = currentUser?.role === 'parent';
+  const isTeacher = currentUser?.role === 'teacher';
+  const isStudent = currentUser?.role === 'student';
+
   const [search, setSearch] = useState('');
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   

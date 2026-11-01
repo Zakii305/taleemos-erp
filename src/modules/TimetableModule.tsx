@@ -1,3 +1,4 @@
+import { getCurrentUser } from '../components/auth/AuthSystem';
 import React, { useState } from 'react';
 import {
   Clock,
@@ -22,6 +23,20 @@ import { triggerBrowserPrint, downloadElementAsPdf } from '../lib/pdf';
 
 export const TimetableModule: React.FC = () => {
   const state = erpStorage.getState();
+  const currentUser = getCurrentUser();
+  const isParent = currentUser?.role === 'parent';
+  const isTeacher = currentUser?.role === 'teacher';
+  const isStudent = currentUser?.role === 'student';
+
+  
+  
+  
+  
+
+  
+  
+  
+  
 
   // Mode: 'class' (each class timetable) | 'teacher' (every teacher's timetable)
   const [viewMode, setViewMode] = useState<'class' | 'teacher'>('class');
@@ -301,7 +316,7 @@ export const TimetableModule: React.FC = () => {
                     <td key={p} className="p-2 border-l border-slate-100 text-center align-top h-28 w-36">
                       {slot ? (
                         <div className="h-full p-2.5 bg-gradient-to-br from-indigo-50/90 to-purple-50/60 border border-indigo-200 rounded-xl flex flex-col justify-between group hover:shadow-md transition-shadow relative">
-                          <div className="absolute top-1 right-1 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <div style={{display: (!isParent && !isTeacher) ? 'flex' : 'none'}} className="absolute top-1 right-1 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                             <button
                               type="button"
                               onClick={(e) => openEditSlot(slot, e)}

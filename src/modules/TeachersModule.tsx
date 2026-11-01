@@ -1,3 +1,4 @@
+import { getCurrentUser } from '../components/auth/AuthSystem';
 import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { GraduationCap, Plus, Printer, Download, Search, Mail, Phone, BookOpen, Layers, Clock, Trash2, CheckSquare, Square, X, Edit2 } from 'lucide-react';
@@ -9,6 +10,11 @@ import { CloudinaryUploader } from '../components/common/CloudinaryUploader';
 
 export const TeachersModule: React.FC = () => {
   const state = erpStorage.getState();
+  const currentUser = getCurrentUser();
+  const isParent = currentUser?.role === 'parent';
+  const isTeacher = currentUser?.role === 'teacher';
+  const isStudent = currentUser?.role === 'student';
+
   const [search, setSearch] = useState('');
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   

@@ -1,3 +1,4 @@
+import { getCurrentUser } from '../components/auth/AuthSystem';
 import React, { useState, useMemo } from 'react';
 import {
   Layers,
@@ -22,6 +23,11 @@ import { triggerBrowserPrint, downloadElementAsPdf } from '../lib/pdf';
 
 export const BatchesModule: React.FC = () => {
   const state = erpStorage.getState();
+  const currentUser = getCurrentUser();
+  const isParent = currentUser?.role === 'parent';
+  const isTeacher = currentUser?.role === 'teacher';
+  const isStudent = currentUser?.role === 'student';
+
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('All');
   

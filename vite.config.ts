@@ -1,15 +1,15 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import { fileURLToPath, URL } from 'node:url'
+import tailwindcss from '@tailwindcss/vite'
 import { VitePWA } from 'vite-plugin-pwa'
 
 export default defineConfig({
   plugins: [
     react(),
+    tailwindcss(), // YEH LINE MISSING THI
     VitePWA({
       registerType: 'autoUpdate',
       workbox: {
-        // Yeh line file size ki limit barha degi (5 MB)
         maximumFileSizeToCacheInBytes: 5 * 1024 * 1024
       },
       manifest: {
@@ -24,10 +24,5 @@ export default defineConfig({
         ]
       }
     })
-  ],
-  resolve: {
-    alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url)),
-    },
-  },
+  ]
 })

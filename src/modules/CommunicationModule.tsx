@@ -12,6 +12,20 @@ import { getCurrentUser } from '../components/auth/AuthSystem';
 export const CommunicationModule: React.FC = () => {
   const state = erpStorage.getState();
   const currentUser = getCurrentUser();
+  const isParent = currentUser?.role === 'parent';
+  const isTeacher = currentUser?.role === 'teacher';
+  const isStudent = currentUser?.role === 'student';
+
+  
+  
+  
+  
+
+  
+  
+  
+  
+  
   const academyId = currentUser?.academyId || state.activeInstitutionId || 'inst-1';
 
   const [activeTab, setActiveTab] = useState<'outbox' | 'templates'>('outbox');
@@ -186,7 +200,7 @@ export const CommunicationModule: React.FC = () => {
             </div>
 
             <div className="space-y-3">
-              {state.communications.map((c) => {
+              {displayRecords.map((c) => {
                 const isSelected = selectedIds.includes(c.id);
                 return (
                   <div key={c.id} className={`p-4 rounded-2xl border transition-all flex flex-col md:flex-row md:items-start justify-between gap-3 ${isSelected ? 'bg-indigo-50/50 border-indigo-400 ring-1 ring-indigo-400/30' : 'bg-white border-slate-200 hover:shadow-sm'}`}>

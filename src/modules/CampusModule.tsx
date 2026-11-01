@@ -1,3 +1,4 @@
+import { getCurrentUser } from '../components/auth/AuthSystem';
 import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Building2, Plus, Printer, Download, Search, DoorOpen, Users, CheckCircle, Trash2, Edit2, CheckSquare, Square, X, CheckCircle2 } from 'lucide-react';
@@ -8,6 +9,11 @@ import { LetterheadPrint } from '../components/common/LetterheadPrint';
 
 export const CampusModule: React.FC = () => {
   const state = erpStorage.getState();
+  const currentUser = getCurrentUser();
+  const isParent = currentUser?.role === 'parent';
+  const isTeacher = currentUser?.role === 'teacher';
+  const isStudent = currentUser?.role === 'student';
+
   const [search, setSearch] = useState('');
   const [typeFilter, setTypeFilter] = useState('All');
   const [selectedIds, setSelectedIds] = useState<string[]>([]);

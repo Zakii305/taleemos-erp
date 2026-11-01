@@ -12,6 +12,10 @@ interface UsersModuleProps {
 }
 
 export const UsersModule: React.FC<UsersModuleProps> = ({ onNavigate }) => {
+    
+  
+  
+
   const [currentUser, setCurrentUser] = useState<User | null>(getCurrentUser());
   const [users, setUsers] = useState<AppUser[]>([]);
   const [academies, setAcademies] = useState<Academy[]>([]);
@@ -94,7 +98,7 @@ export const UsersModule: React.FC<UsersModuleProps> = ({ onNavigate }) => {
 
   const visibleUsers = useMemo(() => {
     let list = users;
-    if (!isDev && isAdmin && userAcadId) list = users.filter((u) => u.academyId === userAcadId || u.uid === currentUser?.uid);
+    if (!isDev && isAdmin && userAcadId) list = users.filter((u) => u.academyId === userAcadId || u.uid === currentUser?.uid || "");
     return list.filter((u) => {
       const matchSearch = u.name.toLowerCase().includes(search.toLowerCase()) || u.email.toLowerCase().includes(search.toLowerCase()) || (u.phone && u.phone.includes(search)) || (u.academyName && u.academyName.toLowerCase().includes(search.toLowerCase())) || (u.uid && u.uid.toLowerCase().includes(search.toLowerCase()));
       const matchRole = roleFilter === 'All' || u.role === roleFilter;

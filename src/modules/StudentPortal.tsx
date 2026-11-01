@@ -1,3 +1,4 @@
+import { getCurrentUser } from '../components/auth/AuthSystem';
 import React, { useState, useMemo } from 'react';
 import {
   GraduationCap,
@@ -46,6 +47,11 @@ interface StudentPortalProps {
 }
 
 export const StudentPortal: React.FC<StudentPortalProps> = ({ user, onNavigate }) => {
+  const currentUser = getCurrentUser();
+  const isParent = currentUser?.role === 'parent';
+  const isTeacher = currentUser?.role === 'teacher';
+  const isStudent = currentUser?.role === 'student';
+
   const state = erpStorage.getState();
   const [trendMetric, setTrendMetric] = useState<'aggregate' | 'subjects'>('aggregate');
 
